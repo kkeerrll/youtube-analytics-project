@@ -19,10 +19,12 @@ class Channel:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
         self.channel_id = channel_id
         self.title: str = self.get_channel_id()['items'][0]['snippet']['title']
-        self.videoCount: int = self.get_channel_id()['items'][0]['statistics']['videoCount']
         self.description: str = self.get_channel_id()['items'][0]['snippet']['description']
         self.url: str = 'https://www.youtube.com/channel/' + self.channel_id
+        self.subscriberCount: str = self.get_channel_id()['items'][0]['statistics']['subscriberCount']
+        self.video_count: int = self.get_channel_id()['items'][0]['statistics']['videoCount']
         self.viewCount: int = self.get_channel_id()['items'][0]['statistics']['viewCount']
+
 
     def print_json(self, dict_print: dict) -> None:
         """Выводит словарь в json-подобном формате с отступами"""
@@ -38,3 +40,17 @@ class Channel:
         """Выводит в консоль информацию о канале."""
         channel = self.get_channel_id()
         self.print_json(channel)
+
+    @classmethod
+    def get_service(cls):
+        """Возвращает объект для работы с YouTube API."""
+        youtube = build('youtube', 'v3', developerKey=api_key)
+        return youtube
+
+    def to_json(self, file_name: str):
+        """
+        Метод `to_json()` сохраняет в файл значения атрибутов экземпляра `Channel`
+        """
+        data = json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        with open(file_name, 'w', encoding='utf-8') as file:
+            json.dump(data, file)
