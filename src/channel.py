@@ -21,9 +21,9 @@ class Channel:
         self.title: str = self.get_channel_id()['items'][0]['snippet']['title']
         self.description: str = self.get_channel_id()['items'][0]['snippet']['description']
         self.url: str = 'https://www.youtube.com/channel/' + self.channel_id
-        self.subscriberCount: str = self.get_channel_id()['items'][0]['statistics']['subscriberCount']
-        self.video_count: int = self.get_channel_id()['items'][0]['statistics']['videoCount']
-        self.viewCount: int = self.get_channel_id()['items'][0]['statistics']['viewCount']
+        self.subscriberCount: int = int(self.get_channel_id()['items'][0]['statistics']['subscriberCount'])
+        self.video_count: int = int(self.get_channel_id()['items'][0]['statistics']['videoCount'])
+        self.viewCount: int = int(self.get_channel_id()['items'][0]['statistics']['viewCount'])
 
 
     def print_json(self, dict_print: dict) -> None:
@@ -54,3 +54,28 @@ class Channel:
         data = json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
         with open(file_name, 'w', encoding='utf-8') as file:
             json.dump(data, file)
+
+    def __str__(self):
+        """Возвращает название и ссылку"""
+        return f"{self.title} {self.url}"
+
+    def __add__(self, other):
+        return self.subscriberCount + other.subscriberCount
+
+    def __sub__(self, other):
+        return self.subscriberCount - other.subscriberCount
+
+    def __gt__(self, other):
+        return self.subscriberCount > other.subscriberCount
+
+    def __ge__(self, other):
+        return self.subscriberCount >= other.subscriberCount
+
+    def __lt__(self, other):
+        return self.subscriberCount < other.subscriberCount
+
+    def __le__(self, other):
+        return self.subscriberCount <= other.subscriberCount
+
+    def __eq__(self, other):
+        return self.subscriberCount == other.subscriberCount
