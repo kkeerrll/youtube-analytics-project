@@ -19,12 +19,20 @@ class Video:
     """Класс для видео из ютуба"""
 
     def __init__(self, video_id: str):
-        """Экземпляр инициализируется id видео"""
         self.video_id: str = video_id
-        self.video_title: str = self.get_video_info()['items'][0]['snippet']['title']
-        self.video_url: str = url_main_video + video_id
-        self.view_count: int = self.to_int(self.get_video_info()['items'][0]['statistics']['viewCount'])
-        self.like_count: int = self.to_int(self.get_video_info()['items'][0]['statistics']['likeCount'])
+        try:
+            """Экземпляр инициализируется id видео"""
+            self.video_title: str = self.get_video_info()['items'][0]['snippet']['title']
+            self.video_url: str = url_main_video + video_id
+            self.view_count: int = self.to_int(self.get_video_info()['items'][0]['statistics']['viewCount'])
+            self.like_count: int = self.to_int(self.get_video_info()['items'][0]['statistics']['likeCount'])
+        except BaseException:
+            self.title: str = None
+            self.video_url: str = None
+            self.view_count: int = None
+            self.like_count: int = None
+
+
 
 
     def __str__(self):
